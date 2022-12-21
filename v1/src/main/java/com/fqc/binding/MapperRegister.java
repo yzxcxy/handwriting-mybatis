@@ -8,15 +8,15 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 提供了一种扫描包路径然后将mapper代理注册到缓存中
+ * 提供了一种扫描包路径然后将mapper代理工厂注册到缓存中,避免每次手动声明接口手动创建mapperFactory
  */
 public class MapperRegister {
     //缓存
-    private Map<Class<?>,MapperProxyFactory<?>> konwnMappers=new HashMap<>();
+    private final Map<Class<?>,MapperProxyFactory<?>> knownMappers=new HashMap<>();
 
     //获取注册的代理
     public <T> T getMapper(Class<T> type, SqlSession sqlSession){
-        MapperProxyFactory<T> mapperProxyFactory = (MapperProxyFactory<T>) konwnMappers.get(type);
+        MapperProxyFactory<T> mapperProxyFactory = (MapperProxyFactory<T>) knownMappers.get(type);
         //如果为空报错
         if(mapperProxyFactory==null){
             throw  new RuntimeException("Type"+type+"is known to the MapperRegister");
@@ -42,15 +42,20 @@ public class MapperRegister {
            if(hasMapper(type)){
                throw new RuntimeException("Type "+type+" is already known to the MapperRegister");
            }
-           konwnMappers.put(type,new MapperProxyFactory<>(type));
+           knownMappers.put(type,new MapperProxyFactory<>(type));
        }
     }
 
+    //判断是否存在该类型的mapper
     private <T> boolean hasMapper(Class<T> type) {
-        MapperProxyFactory<T> mapperProxyFactory = (MapperProxyFactory<T>) konwnMappers.get(type);
+        MapperProxyFactory<T> mapperProxyFactory = (MapperProxyFactory<T>) knownMappers.get(type);
         if(mapperProxyFactory==null)
-            return true;
-        else
             return false;
+        else
+            return true;
+    }
+
+    public Map<Class<?>, MapperProxyFactory<?>> getKnownMappers() {
+        return knownMappers;
     }
 }

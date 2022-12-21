@@ -25,8 +25,7 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
             //Object提供的hashCode和ToString等方法是不需要被代理的
             return method.invoke(this,args);
         }else {
-            //以代理接口名+方法名座位key
-            return "你的被代理了";
+            return sqlSession.selectOne(method.getName(),args);
         }
     }
 }
