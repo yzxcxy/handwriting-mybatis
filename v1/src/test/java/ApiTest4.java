@@ -1,3 +1,4 @@
+import com.alibaba.fastjson.JSON;
 import com.fqc.io.Resources;
 import com.fqc.session.SqlSession;
 import com.fqc.session.SqlSessionFactory;
@@ -8,21 +9,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import po.User;
 
+import javax.swing.*;
 import java.io.IOException;
-import java.io.Reader;
 
-public class ApiTest3 {
-
-    private Logger logger = LoggerFactory.getLogger(ApiTest3.class);
+public class ApiTest4 {
+    private Logger logger = LoggerFactory.getLogger(ApiTest4.class);
 
     @Test
     public void test_SqlSessionFactory() throws IOException {
-        SqlSessionFactoryBuilder factoryBuilder = new SqlSessionFactoryBuilder();
-        Reader reader = Resources.getResourceAsReader("mybatis-config-datasource.xml");
-        SqlSessionFactory sqlSessionFactory = factoryBuilder.build(reader);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(Resources.getResourceAsReader("mybatis-config-datasource.xml"));
         SqlSession sqlSession = sqlSessionFactory.openSqlSession();
         IUserDao mapper = sqlSession.getMapper(IUserDao.class);
         User res = mapper.queryUserInfoById(1L);
-        logger.debug("result is : "+res);
+        logger.info("测试结果：{}", JSON.toJSONString(res));
+    }
+
+    @Test
+    public void test_selectOne() throws IOException {
+
     }
 }
