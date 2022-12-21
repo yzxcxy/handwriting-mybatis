@@ -28,4 +28,6 @@ public interface SqlSession {
      * @param <T> 被代理接口类型
      */
     <T> T getMapper(Class<T> type);
+
+    Configuration getConfiguration();
 }

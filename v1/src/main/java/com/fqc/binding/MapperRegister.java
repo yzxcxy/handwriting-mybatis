@@ -1,6 +1,7 @@
 package com.fqc.binding;
 
 import cn.hutool.core.lang.ClassScanner;
+import com.fqc.session.Configuration;
 import com.fqc.session.SqlSession;
 
 import java.util.HashMap;
@@ -14,6 +15,12 @@ public class MapperRegister {
     //缓存
     private final Map<Class<?>,MapperProxyFactory<?>> knownMappers=new HashMap<>();
 
+    private Configuration config;
+
+    public MapperRegister(Configuration config) {
+        this.config = config;
+    }
+
     //获取注册的代理
     public <T> T getMapper(Class<T> type, SqlSession sqlSession){
         MapperProxyFactory<T> mapperProxyFactory = (MapperProxyFactory<T>) knownMappers.get(type);
@@ -24,7 +31,7 @@ public class MapperRegister {
         try {
             return mapperProxyFactory.newInstance(sqlSession);
         }catch (Exception e){
-            throw new RuntimeException("Error getting mapper instance. Casue:"+e,e);
+            throw new RuntimeException("Error getting mapper instance. Cause:"+e,e);
         }
     }
 
@@ -47,7 +54,7 @@ public class MapperRegister {
     }
 
     //判断是否存在该类型的mapper
-    private <T> boolean hasMapper(Class<T> type) {
+    public <T> boolean hasMapper(Class<T> type) {
         MapperProxyFactory<T> mapperProxyFactory = (MapperProxyFactory<T>) knownMappers.get(type);
         if(mapperProxyFactory==null)
             return false;
@@ -55,7 +62,4 @@ public class MapperRegister {
             return true;
     }
 
-    public Map<Class<?>, MapperProxyFactory<?>> getKnownMappers() {
-        return knownMappers;
-    }
 }

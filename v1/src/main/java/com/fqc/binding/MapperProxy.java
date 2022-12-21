@@ -9,23 +9,36 @@ import java.util.Map;
 
 public class MapperProxy<T> implements InvocationHandler, Serializable {
 
-    //需要执行的sql语句
-    private final SqlSession sqlSession;
-    //被代理的用户定义的数据库操作接口
+    private SqlSession sqlSession;
     private final Class<T> mapperInterface;
+    private final Map<Method, MapperMethod> methodCache;
 
-    public MapperProxy(SqlSession sqlSession, Class<T> mapperInterface) {
+    public MapperProxy(SqlSession sqlSession, Class<T> mapperInterface, Map<Method, MapperMethod> methodCache) {
         this.sqlSession = sqlSession;
         this.mapperInterface = mapperInterface;
+        this.methodCache = methodCache;
     }
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        if(Object.class.equals(method.getDeclaringClass())){
-            //Object提供的hashCode和ToString等方法是不需要被代理的
-            return method.invoke(this,args);
-        }else {
-            return sqlSession.selectOne(method.getName(),args);
+        if (Object.class.equals(method.getDeclaringClass())) {
+            return method.invoke(this, args);
+        } else {
+            final MapperMethod mapperMethod = cachedMapperMethod(method);
+            return mapperMethod.execute(sqlSession, args);
         }
+    }
+
+    /**
+     * 去缓存中找MapperMethod
+     */
+    private MapperMethod cachedMapperMethod(Method method) {
+        MapperMethod mapperMethod = methodCache.get(method);
+        if (mapperMethod == null) {
+            //找不到才去new
+            mapperMethod = new MapperMethod(mapperInterface, method, sqlSession.getConfiguration());
+            methodCache.put(method, mapperMethod);
+        }
+        return mapperMethod;
     }
 }

@@ -1,6 +1,6 @@
 package com.fqc.session.defaults;
 
-import com.fqc.binding.MapperRegister;
+import com.fqc.session.Configuration;
 import com.fqc.session.SqlSession;
 
 /**
@@ -8,10 +8,10 @@ import com.fqc.session.SqlSession;
  */
 public class DefaultSqlSession implements SqlSession {
 
-    private final MapperRegister mapperRegister;
+    private Configuration configuration;
 
-    public DefaultSqlSession(MapperRegister mapperRegister) {
-        this.mapperRegister = mapperRegister;
+    public DefaultSqlSession(Configuration configuration) {
+        this.configuration = configuration;
     }
 
     @Override
@@ -26,6 +26,11 @@ public class DefaultSqlSession implements SqlSession {
 
     @Override
     public <T> T getMapper(Class<T> type) {
-        return mapperRegister.getMapper(type,this);
+        return configuration.getMapper(type, this);
+    }
+
+    @Override
+    public Configuration getConfiguration() {
+        return configuration;
     }
 }

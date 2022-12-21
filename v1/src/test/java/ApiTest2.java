@@ -11,13 +11,13 @@ public class ApiTest2 {
 
     @Test
     public void test_MapperSqlSessionFactory(){
-        MapperRegister mapperRegister = new MapperRegister();
+/*        MapperRegister mapperRegister = new MapperRegister();
         mapperRegister.addMappers("dao");
         DefaultSqlSessionFactory defaultSqlSessionFactory = new DefaultSqlSessionFactory(mapperRegister);
         SqlSession sqlSession = defaultSqlSessionFactory.openSqlSession();
         ISchoolDao mapper = sqlSession.getMapper(ISchoolDao.class);
         String schoolName = mapper.querySchoolName("xxxx");
-        logger.debug("test result is: "+schoolName);
+        logger.debug("test result is: "+schoolName);*/
         //res: 11:59:57.657 [main] DEBUG ApiTest2 - test result is: 你被代理了，方法：querySchoolName 参数：[Ljava.lang.Object;@1bc6a36e
     }
 }
