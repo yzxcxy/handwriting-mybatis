@@ -1,4 +1,4 @@
-package com.fqc.mapping;
+package com.fqc.session.mapping;
 
 import java.util.Map;
 

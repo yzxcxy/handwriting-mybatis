@@ -1,4 +1,4 @@
-package com.fqc.mapping;
+package com.fqc.session.mapping;
 
 /**
  * 表示sql语句的类型

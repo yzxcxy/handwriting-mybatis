@@ -2,8 +2,18 @@ package com.fqc.session;
 
 import com.fqc.binding.MapperRegister;
 import com.fqc.datasource.durid.DruidDataSourceFactory;
-import com.fqc.mapping.Environment;
-import com.fqc.mapping.MappedStatement;
+import com.fqc.datasource.pooled.PooledDataSourceFactory;
+import com.fqc.datasource.upooled.UnpooledDataSourceFactory;
+import com.fqc.executor.Executor;
+import com.fqc.executor.SimpleExecutor;
+import com.fqc.executor.resultset.DefaultResultSetHandler;
+import com.fqc.executor.resultset.ResultSetHandler;
+import com.fqc.executor.statement.PreparedStatementHandler;
+import com.fqc.executor.statement.StatementHandler;
+import com.fqc.session.mapping.BoundSql;
+import com.fqc.session.mapping.Environment;
+import com.fqc.session.mapping.MappedStatement;
+import com.fqc.transaction.Transaction;
 import com.fqc.transaction.jdbc.JdbcTransactionFactory;
 import com.fqc.type.TypeAliasRegistry;
 
@@ -39,6 +49,9 @@ public class Configuration {
     public Configuration() {
         typeAliasRegistry.registerAlias("JDBC", JdbcTransactionFactory.class);
         typeAliasRegistry.registerAlias("DRUID", DruidDataSourceFactory.class);
+        //新增两个数据源类型
+        typeAliasRegistry.registerAlias("UNPOOLED", UnpooledDataSourceFactory.class);
+        typeAliasRegistry.registerAlias("POOLED", PooledDataSourceFactory.class);
     }
 
     public void addMappers(String packageName) {
@@ -80,4 +93,26 @@ public class Configuration {
     public void setTypeAliasRegistry(TypeAliasRegistry typeAliasRegistry) {
         this.typeAliasRegistry = typeAliasRegistry;
     }
+
+    /**
+     * 创建语句处理器
+     */
+    public StatementHandler newStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameter, ResultHandler resultHandler, BoundSql boundSql) {
+        return new PreparedStatementHandler(executor, mappedStatement, parameter, resultHandler, boundSql);
+    }
+
+    /**
+     * 创建结果集处理器
+     */
+    public ResultSetHandler newResultSetHandler(Executor executor, MappedStatement mappedStatement, BoundSql boundSql) {
+        return new DefaultResultSetHandler(executor, mappedStatement, boundSql);
+    }
+
+    /**
+     * 生产执行器
+     */
+    public Executor newExecutor(Transaction transaction) {
+        return new SimpleExecutor(this, transaction);
+    }
+
 }

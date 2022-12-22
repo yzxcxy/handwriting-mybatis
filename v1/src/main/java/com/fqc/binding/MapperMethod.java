@@ -1,7 +1,7 @@
 package com.fqc.binding;
 
-import com.fqc.mapping.MappedStatement;
-import com.fqc.mapping.SqlCommandType;
+import com.fqc.session.mapping.MappedStatement;
+import com.fqc.session.mapping.SqlCommandType;
 import com.fqc.session.Configuration;
 import com.fqc.session.SqlSession;
 

@@ -1,4 +1,4 @@
-package com.fqc.mapping;
+package com.fqc.session.mapping;
 
 import com.fqc.session.Configuration;
 import com.fqc.type.JdbcType;

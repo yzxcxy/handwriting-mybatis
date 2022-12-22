@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import po.User;
 
-import javax.swing.*;
 import java.io.IOException;
 
 public class ApiTest4 {
@@ -25,7 +24,13 @@ public class ApiTest4 {
     }
 
     @Test
-    public void test_selectOne() throws IOException {
-
+    public void test_SqlSessionFactory2() throws IOException {
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(Resources.getResourceAsReader("mybatis-config-datasource.xml"));
+        SqlSession sqlSession = sqlSessionFactory.openSqlSession();
+        IUserDao mapper = sqlSession.getMapper(IUserDao.class);
+        for (int i = 0; i < 50; i++) {
+            User user = mapper.queryUserInfoById(1L);
+            logger.info("测试结果：{}", JSON.toJSONString(user));
+        }
     }
 }
