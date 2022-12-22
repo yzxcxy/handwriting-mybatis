@@ -2,6 +2,8 @@ package com.fqc.session;
 
 import com.fqc.binding.MapperRegister;
 import com.fqc.datasource.durid.DruidDataSourceFactory;
+import com.fqc.datasource.pooled.PooledDataSourceFactory;
+import com.fqc.datasource.upooled.UnpooledDataSourceFactory;
 import com.fqc.mapping.Environment;
 import com.fqc.mapping.MappedStatement;
 import com.fqc.transaction.jdbc.JdbcTransactionFactory;
@@ -39,6 +41,9 @@ public class Configuration {
     public Configuration() {
         typeAliasRegistry.registerAlias("JDBC", JdbcTransactionFactory.class);
         typeAliasRegistry.registerAlias("DRUID", DruidDataSourceFactory.class);
+        //新增两个数据源类型
+        typeAliasRegistry.registerAlias("UNPOOLED", UnpooledDataSourceFactory.class);
+        typeAliasRegistry.registerAlias("POOLED", PooledDataSourceFactory.class);
     }
 
     public void addMappers(String packageName) {
