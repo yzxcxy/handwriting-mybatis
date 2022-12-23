@@ -1,4 +1,4 @@
-package com.fqc.session.mapping;
+package com.fqc.mapping;
 
 import com.fqc.transaction.TransactionFactory;
 

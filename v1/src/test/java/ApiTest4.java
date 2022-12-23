@@ -17,7 +17,7 @@ public class ApiTest4 {
     @Test
     public void test_SqlSessionFactory() throws IOException {
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(Resources.getResourceAsReader("mybatis-config-datasource.xml"));
-        SqlSession sqlSession = sqlSessionFactory.openSqlSession();
+        SqlSession sqlSession = sqlSessionFactory.openSession();
         IUserDao mapper = sqlSession.getMapper(IUserDao.class);
         User res = mapper.queryUserInfoById(1L);
         logger.info("测试结果：{}", JSON.toJSONString(res));
@@ -26,7 +26,7 @@ public class ApiTest4 {
     @Test
     public void test_SqlSessionFactory2() throws IOException {
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(Resources.getResourceAsReader("mybatis-config-datasource.xml"));
-        SqlSession sqlSession = sqlSessionFactory.openSqlSession();
+        SqlSession sqlSession = sqlSessionFactory.openSession();
         IUserDao mapper = sqlSession.getMapper(IUserDao.class);
         for (int i = 0; i < 50; i++) {
             User user = mapper.queryUserInfoById(1L);

@@ -21,6 +21,10 @@ public class MapperProxyFactory<T> {
         this.mapperInterface = mapperInterface;
     }
 
+    public Map<Method, MapperMethod> getMethodCache() {
+        return methodCache;
+    }
+
     @SuppressWarnings("unchecked")
     public T newInstance(SqlSession sqlSession) {
         final MapperProxy<T> mapperProxy = new MapperProxy<>(sqlSession, mapperInterface, methodCache);

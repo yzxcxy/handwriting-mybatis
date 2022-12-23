@@ -1,7 +1,7 @@
 package com.fqc.session.defaults;
 
 import com.fqc.executor.Executor;
-import com.fqc.session.mapping.Environment;
+import com.fqc.mapping.Environment;
 import com.fqc.session.Configuration;
 import com.fqc.session.SqlSession;
 import com.fqc.session.SqlSessionFactory;
@@ -19,7 +19,7 @@ public class DefaultSqlSessionFactory implements SqlSessionFactory {
     }
 
     @Override
-    public SqlSession openSqlSession() {
+    public SqlSession openSession() {
         Transaction tx = null;
         try {
             final Environment environment = configuration.getEnvironment();

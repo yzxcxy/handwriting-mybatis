@@ -15,7 +15,7 @@ public class Resources {
     }
 
     //加载一个资源文件作为输入流
-    private static InputStream getResourceAsStream(String resource) throws IOException {
+    public static InputStream getResourceAsStream(String resource) throws IOException {
         ClassLoader[] classLoaders = getClassLoaders();
         for (ClassLoader classLoader : classLoaders) {
             InputStream inputStream = classLoader.getResourceAsStream(resource);

@@ -20,7 +20,7 @@ public class ApiTest3 {
         SqlSessionFactoryBuilder factoryBuilder = new SqlSessionFactoryBuilder();
         Reader reader = Resources.getResourceAsReader("mybatis-config-datasource.xml");
         SqlSessionFactory sqlSessionFactory = factoryBuilder.build(reader);
-        SqlSession sqlSession = sqlSessionFactory.openSqlSession();
+        SqlSession sqlSession = sqlSessionFactory.openSession();
         IUserDao mapper = sqlSession.getMapper(IUserDao.class);
         User res = mapper.queryUserInfoById(1L);
         logger.debug("result is : "+res);

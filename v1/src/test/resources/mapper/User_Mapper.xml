@@ -2,10 +2,38 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dao.IUserDao">
 
+    <!--TODO :表名不分大小写-->
     <select id="queryUserInfoById" parameterType="java.lang.Long" resultType="po.User">
         SELECT id, userId, userHead, createTime
-        FROM USER
+        FROM user
         where id = #{id}
     </select>
+
+    <select id="queryUserInfo" parameterType="po.User" resultType="po.User">
+        SELECT id, userId, userName, userHead
+        FROM user
+        where id = #{id} and userId = #{userId}
+    </select>
+
+    <select id="queryUserInfoList" resultType="po.User">
+        SELECT id, userId, userName, userHead
+        FROM user
+    </select>
+
+    <update id="updateUserInfo" parameterType="po.User">
+        UPDATE user
+        SET userName = #{userName}
+        WHERE id = #{id}
+    </update>
+
+    <insert id="insertUserInfo" parameterType="po.User">
+        INSERT INTO user
+            (userId, userName, userHead, createTime, updateTime)
+        VALUES (#{userId}, #{userName}, #{userHead}, now(), now())
+    </insert>
+
+    <delete id="deleteUserInfoByUserId" parameterType="java.lang.String">
+        DELETE FROM user WHERE userId = #{userId}
+    </delete>
 
 </mapper>

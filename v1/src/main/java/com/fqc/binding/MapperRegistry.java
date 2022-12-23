@@ -11,13 +11,13 @@ import java.util.Set;
 /**
  * 提供了一种扫描包路径然后将mapper代理工厂注册到缓存中,避免每次手动声明接口手动创建mapperFactory
  */
-public class MapperRegister {
+public class MapperRegistry {
     //缓存
     private final Map<Class<?>,MapperProxyFactory<?>> knownMappers=new HashMap<>();
 
     private Configuration config;
 
-    public MapperRegister(Configuration config) {
+    public MapperRegistry(Configuration config) {
         this.config = config;
     }
 

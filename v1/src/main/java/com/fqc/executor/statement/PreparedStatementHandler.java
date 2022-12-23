@@ -1,9 +1,10 @@
 package com.fqc.executor.statement;
 
 import com.fqc.executor.Executor;
-import com.fqc.session.mapping.BoundSql;
-import com.fqc.session.mapping.MappedStatement;
+import com.fqc.mapping.BoundSql;
+import com.fqc.mapping.MappedStatement;
 import com.fqc.session.ResultHandler;
+import com.fqc.session.RowBounds;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,8 +17,8 @@ import java.util.List;
  */
 public class PreparedStatementHandler extends BaseStatementHandler {
 
-    public PreparedStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameterObject, ResultHandler resultHandler, BoundSql boundSql) {
-        super(executor, mappedStatement, parameterObject, resultHandler, boundSql);
+    public PreparedStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
+        super(executor, mappedStatement, parameterObject, rowBounds, resultHandler, boundSql);
     }
 
     @Override
@@ -28,9 +29,17 @@ public class PreparedStatementHandler extends BaseStatementHandler {
 
     @Override
     public void parameterize(Statement statement) throws SQLException {
+        parameterHandler.setParameters((PreparedStatement) statement);
+    }
+
+    /**
+     * step-11 新增修改方法
+     */
+    @Override
+    public int update(Statement statement) throws SQLException {
         PreparedStatement ps = (PreparedStatement) statement;
-        //TODO 写死的操作，后续再改进
-        ps.setLong(1, Long.parseLong(((Object[]) parameterObject)[0].toString()));
+        ps.execute();
+        return ps.getUpdateCount();
     }
 
     @Override

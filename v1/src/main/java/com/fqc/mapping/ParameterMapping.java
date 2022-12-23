@@ -1,19 +1,23 @@
-package com.fqc.session.mapping;
+package com.fqc.mapping;
 
 import com.fqc.session.Configuration;
 import com.fqc.type.JdbcType;
+import com.fqc.type.TypeHandler;
+import com.fqc.type.TypeHandlerRegistry;
 
 /**
- * @description 参数映射 #{property,javaType=int,jdbcType=NUMERIC}
+ * 参数映射 #{property,javaType=int,jdbcType=NUMERIC}
  */
 public class ParameterMapping {
     private Configuration configuration;
+
     // property
     private String property;
     // javaType = int
     private Class<?> javaType = Object.class;
     // jdbcType=NUMERIC
     private JdbcType jdbcType;
+    private TypeHandler<?> typeHandler;
 
     private ParameterMapping() {
     }
@@ -22,9 +26,10 @@ public class ParameterMapping {
 
         private ParameterMapping parameterMapping = new ParameterMapping();
 
-        public Builder(Configuration configuration, String property) {
+        public Builder(Configuration configuration, String property, Class<?> javaType) {
             parameterMapping.configuration = configuration;
             parameterMapping.property = property;
+            parameterMapping.javaType = javaType;
         }
 
         public Builder javaType(Class<?> javaType) {
@@ -37,6 +42,14 @@ public class ParameterMapping {
             return this;
         }
 
+        public ParameterMapping build() {
+            if (parameterMapping.typeHandler == null && parameterMapping.javaType != null) {
+                Configuration configuration = parameterMapping.configuration;
+                TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
+                parameterMapping.typeHandler = typeHandlerRegistry.getTypeHandler(parameterMapping.javaType, parameterMapping.jdbcType);
+            }
+            return parameterMapping;
+        }
     }
 
     public Configuration getConfiguration() {
@@ -53,5 +66,9 @@ public class ParameterMapping {
 
     public JdbcType getJdbcType() {
         return jdbcType;
+    }
+
+    public TypeHandler<?> getTypeHandler() {
+        return typeHandler;
     }
 }

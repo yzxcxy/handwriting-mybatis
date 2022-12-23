@@ -1,9 +1,10 @@
 package com.fqc.executor.statement;
 
 import com.fqc.executor.Executor;
-import com.fqc.session.mapping.BoundSql;
-import com.fqc.session.mapping.MappedStatement;
+import com.fqc.mapping.BoundSql;
+import com.fqc.mapping.MappedStatement;
 import com.fqc.session.ResultHandler;
+import com.fqc.session.RowBounds;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -15,8 +16,8 @@ import java.util.List;
  */
 public class SimpleStatementHandler extends BaseStatementHandler {
 
-    public SimpleStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameterObject, ResultHandler resultHandler, BoundSql boundSql) {
-        super(executor, mappedStatement, parameterObject, resultHandler, boundSql);
+    public SimpleStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
+        super(executor, mappedStatement, parameterObject, rowBounds, resultHandler, boundSql);
     }
 
     @Override
@@ -27,6 +28,13 @@ public class SimpleStatementHandler extends BaseStatementHandler {
     @Override
     public void parameterize(Statement statement) throws SQLException {
         // N/A
+    }
+
+    @Override
+    public int update(Statement statement) throws SQLException {
+        String sql = boundSql.getSql();
+        statement.execute(sql);
+        return statement.getUpdateCount();
     }
 
     @Override
